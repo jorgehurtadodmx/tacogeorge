@@ -17,4 +17,12 @@ public class Taco {
     @NonNull
     @Size(min = 1, message = "at least 1 ingredient pls")
     private List<Ingredients> ingredients;
+
+    public Taco() {
+    }
+
+    public Taco(String name, List<Ingredients> ingredients) {
+        this.name = name;
+        this.ingredients = ingredients;
+    }
 }
