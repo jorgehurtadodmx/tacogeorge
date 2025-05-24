@@ -1,6 +1,6 @@
 package george.taco_cloud.controller;
 
-import george.taco_cloud.entities.Ingredients;
+import george.taco_cloud.entities.Ingredient;
 import george.taco_cloud.entities.Taco;
 import george.taco_cloud.repository.IngredientRepository;
 import george.taco_cloud.stufftoorder.TacoOrder;
@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,11 +35,11 @@ public class DesignTacoController {
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
-        Iterable<Ingredients> ingredients = ingredientRepository.findAll();
-        Ingredients.Type[] types = Ingredients.Type.values();
-        for (Ingredients.Type type : types)  {
+        Iterable<Ingredient> ingredients = ingredientRepository.findAll();
+        Ingredient.Type[] types = george.taco_cloud.entities.Ingredient.Type.values();
+        for (Ingredient.Type type : types)  {
             model.addAttribute(type.toString().toLowerCase(),
-                    filterByType((List<Ingredients>) ingredients, type));
+                    filterByType((List<Ingredient>) ingredients, type));
         }
     }
 
@@ -73,7 +72,7 @@ public class DesignTacoController {
         return "design";
     }
 
-    private Iterable<Ingredients> filterByType(List<Ingredients> ingredients, Ingredients.Type type) {
+    private Iterable<Ingredient> filterByType(List<Ingredient> ingredients, Ingredient.Type type) {
         return ingredients.stream().filter(x -> x.getType().equals(type))
                 .collect(Collectors.toList());
     }

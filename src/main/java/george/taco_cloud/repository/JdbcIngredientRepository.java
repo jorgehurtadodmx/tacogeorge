@@ -1,6 +1,6 @@
-package george.taco_cloud.repository;
+/*package george.taco_cloud.repository;
 
-import george.taco_cloud.entities.Ingredients;
+import george.taco_cloud.entities.Ingredient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,7 +21,7 @@ public class JdbcIngredientRepository implements IngredientRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Iterable<Ingredients> findAll() {
+    public Iterable<Ingredient> findAll() {
         return jdbcTemplate.query(
                 "select id, name, type from Ingredient",
                 this::mapRowToIngredient);
@@ -30,8 +30,8 @@ public class JdbcIngredientRepository implements IngredientRepository {
 
 
     @Override
-    public Optional<Ingredients> findById(String id) {
-        List<Ingredients> results = jdbcTemplate.query(
+    public Optional<Ingredient> findById(String id) {
+        List<Ingredient> results = jdbcTemplate.query(
                 "select id, name, type from Ingredient where id=?",
                 this::mapRowToIngredient,
                 id);
@@ -44,23 +44,24 @@ public class JdbcIngredientRepository implements IngredientRepository {
 
     //how to insert rows
     @Override
-    public Ingredients save(Ingredients ingredients) {
+    public Ingredient save(Ingredient ingredient) {
         jdbcTemplate.update(
                 "insert into Ingredients (id, name, type) values (?, ?, ?)",
-                ingredients.getId(),
-                ingredients.getName(),
-                ingredients.getType().toString());
-                return ingredients;
+                ingredient.getId(),
+                ingredient.getName(),
+                ingredient.getType().toString());
+                return ingredient;
 
 
 
     }
     // mas info en p95, mostly irrelevant
-    private Ingredients mapRowToIngredient(ResultSet row, int rowNum) throws SQLException {
-        return new Ingredients(
+    private Ingredient mapRowToIngredient(ResultSet row, int rowNum) throws SQLException {
+        return new Ingredient(
                 row.getString("id"),
                 row.getString("name"),
-                Ingredients.Type.valueOf(row.getString("type"))
+                george.taco_cloud.entities.Ingredient.Type.valueOf(row.getString("type"))
         );
     }
 }
+rendered innefective after refactor*/
