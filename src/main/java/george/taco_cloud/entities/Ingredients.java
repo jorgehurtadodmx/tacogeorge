@@ -2,7 +2,6 @@ package george.taco_cloud.entities;
 
 import lombok.Data;
 
-import java.lang.reflect.Type;
 
 @Data
 public class Ingredients {

@@ -2,9 +2,11 @@ package george.taco_cloud.controller;
 
 import george.taco_cloud.entities.Ingredients;
 import george.taco_cloud.entities.Taco;
+import george.taco_cloud.repository.IngredientRepository;
 import george.taco_cloud.stufftoorder.TacoOrder;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -21,32 +23,29 @@ import java.util.stream.Collectors;
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
 
+
+
+
+    private final IngredientRepository ingredientRepository;
+
+    @Autowired
+    public DesignTacoController(IngredientRepository ingredientRepository) {
+        this.ingredientRepository = ingredientRepository;
+    }
+
+
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
-        List<Ingredients> ingredients = Arrays.asList(
-                new Ingredients("FLTO", "Flour Tortilla", Ingredients.Type.WRAP),
-                new Ingredients("COTO", "Corn Tortilla", Ingredients.Type.WRAP),
-                new Ingredients("GRBF", "Ground Beef", Ingredients.Type.PROTEIN),
-                new Ingredients("CARN", "Carnitas", Ingredients.Type.PROTEIN),
-                new Ingredients("TMTO", "Diced Tomatoes", Ingredients.Type.VEGGIES),
-                new Ingredients("LETC", "Lettuce", Ingredients.Type.VEGGIES),
-                new Ingredients("CHED", "Cheddar", Ingredients.Type.CHEESE),
-                new Ingredients("JACK", "Monterrey Jack", Ingredients.Type.CHEESE),
-                new Ingredients("SLSA", "Salsa", Ingredients.Type.SAUCE),
-                new Ingredients("SRCR", "Sour Cream", Ingredients.Type.SAUCE)
-        );
-
-
+        Iterable<Ingredients> ingredients = ingredientRepository.findAll();
         Ingredients.Type[] types = Ingredients.Type.values();
-        for (Ingredients.Type type : types) {
-            model.addAttribute(type.toString().toLowerCase(),filterByType(ingredients, type));
-
-
+        for (Ingredients.Type type : types)  {
+            model.addAttribute(type.toString().toLowerCase(),
+                    filterByType((List<Ingredients>) ingredients, type));
+        }
     }
 
 
 
-}
 
     @PostMapping //to whatever has TacoOrder redirection, gets into orders/current
     public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute TacoOrder tacoOrder) {
@@ -55,7 +54,7 @@ public class DesignTacoController {
             return "design";
         }
         tacoOrder.addTaco(taco);
-        
+
         //log.info("Processing taco: {}", taco);
         return "redirect:/orders/current";
     }
