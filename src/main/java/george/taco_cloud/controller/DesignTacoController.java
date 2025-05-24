@@ -6,22 +6,20 @@ import george.taco_cloud.stufftoorder.TacoOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Slf4j
-@Controller
-@RequestMapping("/design")
+@Slf4j //just a log
+@Controller //allows component scanning and creates an instance of the class, as a bean on the main.
+@RequestMapping("/design") //type of request  (and path)=
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
 
+    @ModelAttribute
     public void addIngredientsToModel(Model model) {
         List<Ingredients> ingredients = Arrays.asList(
                 new Ingredients("FLTO", "Flour Tortilla", Ingredients.Type.WRAP),
@@ -47,6 +45,13 @@ public class DesignTacoController {
 
 
 }
+
+    @PostMapping //to whatever has TacoOrder redirection, gets into orders/current
+    public String processTaco(Taco taco, @ModelAttribute TacoOrder tacoOrder) {
+        tacoOrder.addTaco(taco);
+        //log.info("Processing taco: {}", taco);
+        return "redirect:/orders/current";
+    }
     @ModelAttribute(name = "tacoOrder")
     public TacoOrder order() {
         return new TacoOrder();
